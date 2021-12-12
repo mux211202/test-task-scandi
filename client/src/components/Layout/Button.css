@@ -1,0 +1,9 @@
+.styled-btn{
+    background: #5ECE7B;
+    font-weight: 600;
+    color:white;
+    font-size: 16px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}

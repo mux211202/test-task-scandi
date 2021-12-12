@@ -1,0 +1,33 @@
+.galery{
+    display: flex;
+}
+.galery img{
+    object-fit: scale-down;
+}
+.galery-main-image{
+    width: 600px;
+    height: 511px;
+}
+.galery-side-bar{
+    display: flex;
+    flex-direction: column;
+}
+.side-bar-img{
+    width: 80px;
+    height: 80px;
+    margin-top: 7px;
+    margin-bottom: 7px;
+    transition: 0.3s all ease;
+    object-fit: scale-down;
+}
+.side-bar-img:hover{
+    cursor: pointer;
+    transform: scale(1.3)
+}
+.side-bar-img.active{
+    border: 3px solid rgb(124, 123, 123);
+}
+.side-bar-img.active:hover{
+    cursor: pointer;
+    transform: scale(1);
+}

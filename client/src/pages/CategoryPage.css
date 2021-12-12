@@ -1,0 +1,17 @@
+.category-name{
+    font-weight: 400;
+    font-size: 42px;
+    text-transform: capitalize;
+    margin-top: 75px;
+    margin-bottom: 50px;
+}
+.product-card-container{
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+.product-card-name{
+    font-weight: 300;
+    font-size: 18px;
+    margin-top: 24px;
+}
