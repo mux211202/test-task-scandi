@@ -24,7 +24,7 @@ export default class ProductCard extends Component {
                                     </div>
                                 {!inStock && <div className= 'out-of-stock'>OUT OF STOCK</div>}
                             </Link>
-                            {inStock && <img onClick={()=>{addToCart(data, activeCurrency)}}className="product-cart-icon" src={cartIcon}/>}
+                            {inStock && <img onClick={()=>{console.log(data); addToCart(data, activeCurrency)}}className="product-cart-icon" src={cartIcon}/>}
                         </div>
                     )}
                 }

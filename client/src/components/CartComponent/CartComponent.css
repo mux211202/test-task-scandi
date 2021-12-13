@@ -17,6 +17,26 @@
 .cart-item .product-price{
     margin-top: 12px;
 }
+.cart-item .attributes-container{
+    display: flex;
+    margin-top: 10px;
+}
+.cart-item  .attribute-block{
+    margin-right: 20px;
+}
+.cart-item .attribute-name{
+    font-size: 14px;
+}
+.cart-item .attribute-value{
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.cart-item .attribute-value:hover{
+    transform: scale(1.1);
+}
+.cart-item .attribute-value.active:hover{
+    transform: scale(1);
+}
 .right-side{
     display: flex;
     justify-content: center;
@@ -43,4 +63,13 @@
     font-size: 50px;
     font-weight: 200;
     cursor: pointer;
+}
+.total-amount{
+    margin-top: 10px;
+}
+.total-amount{
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 26px;
 }

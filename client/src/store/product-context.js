@@ -25,19 +25,22 @@ export  class ProductContextProvider extends Component {
             attributes:[]
         }
     }
-    setAttributeValue = (productId, attributeName, index) => {
+    setAllSettedProducts = (productId, allSettedProducts, attributes) => {
+        const productIndInArr = allSettedProducts.findIndex((product)=> product.id === productId);
+        const productsLen = allSettedProducts.length;
+        const newSettedProduct = {...allSettedProducts[productIndInArr], attributes}
+        const newSettedProducts =   [...allSettedProducts.slice(0,productIndInArr), 
+                                    newSettedProduct, 
+                                    ...allSettedProducts.slice(productIndInArr+1, productsLen)];
+        return newSettedProducts
+    }
+    setAttributeValue = (product, attributeName, index) => {
         this.setState(({attributes, allSettedProducts})=>{
             const attributeIndex  = attributes.findIndex(attribute => attribute.name === attributeName);
             const newAtribute = {...attributes[attributeIndex], selectedValueIndex: index};
             const len = attributes.length;
             const newAtributes = [...attributes.slice(0,attributeIndex), newAtribute, ...attributes.slice(attributeIndex+1, len)];
-
-            const productIndInArr = allSettedProducts.findIndex((product)=> product.id === productId);
-            const productsLen = allSettedProducts.length;
-            const newSettedProduct = {...allSettedProducts[productIndInArr], attributes: newAtributes}
-            const newSettedProducts =   [...allSettedProducts.slice(0,productIndInArr), 
-                                        newSettedProduct, 
-                                        ...allSettedProducts.slice(productIndInArr+1, productsLen)];
+            const newSettedProducts = this.setAllSettedProducts(product.id, allSettedProducts, newAtributes);
             return {
                 attributes: newAtributes,
                 allSettedProducts: newSettedProducts

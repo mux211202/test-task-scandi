@@ -1,14 +1,18 @@
 import React, { Component } from 'react'
 
 export default class CurrencySwitcher extends Component {
+    onCurrencyChangeHandler = (e) => {
+        const {changeActiveCurrency} = this.props;
+        const newCurrency = e.target.value;
+        changeActiveCurrency(newCurrency)
+    }
     render() {
-        const { currencies, changeActiveCurrency, activeCurrency } = this.props;
-        
+        const { currencies, activeCurrency } = this.props;
         return (
             <div className='currency-select-container'>
                 <select
                 className='currency-select' 
-                onChange={(e)=>{changeActiveCurrency(e.target.value)}}
+                onChange={this.onCurrencyChangeHandler}
                 value={ activeCurrency.value }>
                     {currencies.map(currency =>
                         <option 

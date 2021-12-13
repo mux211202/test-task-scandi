@@ -29,9 +29,7 @@ export default class ProductInfo extends Component {
                             </div>
                         </div>
                         <Button 
-                        onClick={()=>{
-                            console.log(attributes);
-                            cartCtx.addToCart(productData, activeCurrency, attributes)}}
+                        onClick={()=>{cartCtx.addToCart(productData, activeCurrency, attributes)}}
                         w='292px' 
                         h='52px'>
                             ADD TO CART

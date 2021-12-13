@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Price from '../Price/Price';
+import Attributes from '../ProductInfo/Attributes/Attributes';
 export default class CartItem extends Component {
     plusOnClickHandler = () => {
         const {addToCart, productData, activeCurrency} = this.props;
@@ -10,8 +11,8 @@ export default class CartItem extends Component {
         removeFromCart(productData, activeCurrency)
     }
     render() {
-        const {activeCurrency} = this.props;
-        const {name, brand, amount, gallery, prices} = this.props.productData;
+        const {activeCurrency, productData, setAttributeValue} = this.props;
+        const {name, brand, amount, gallery, prices, id} = this.props.productData;
         return (
             <>
             <div className='grey-hl'></div>
@@ -20,8 +21,13 @@ export default class CartItem extends Component {
                     <div className='product-name'>{name}</div>
                     <div className='product-brand'>{brand}</div>
                     <div className='product-price'>
-                        <Price prices={prices} activeCurrency={activeCurrency}/>
+                        <Price prices={prices} activeCurrency={activeCurrency} amount={amount}/>
                     </div>
+                    <Attributes
+                        productData={productData} 
+                        setAttributeValue={setAttributeValue} 
+                        id={id} attributes={productData.attributes}
+                    />
                 </div>
                 <div className='right-side'>
                     <div className='amount-controller'>

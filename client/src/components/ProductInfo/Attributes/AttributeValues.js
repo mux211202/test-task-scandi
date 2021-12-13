@@ -11,13 +11,13 @@ export default class AttributeValues extends Component {
                         return(
                             type==='text' ?
                             <div
-                            onClick={()=>{setAttributeValue(productData.id,name, i)}}
+                            onClick={()=>{setAttributeValue(productData,name, i)}}
                             className= {selectedValueIndex=== i ? 'attribute-value active' : 'attribute-value'} 
                             key={`${item.value}`}>
                                 {item.value}
                             </div> : 
                             <div
-                            onClick={()=>{setAttributeValue(productData.id,name, i)}}
+                            onClick={()=>{setAttributeValue(productData,name, i)}}
                             style={{backgroundColor:`${item.value}`}} 
                             className= {selectedValueIndex=== i ? 'attribute-value color active' : 'attribute-value'}  
                             key={`${item.value}`}></div>
