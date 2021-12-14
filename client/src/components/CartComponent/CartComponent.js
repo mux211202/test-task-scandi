@@ -3,13 +3,14 @@ import CartItem from './CartItem';
 import './CartComponent.css';
 import CartContext from '../../store/cart-context';
 import Price from '../Price/Price';
+import Button from '../Layout/Button';
 export default class CartComponent extends Component {
     render() {
         const {activeCurrency} = this.props;
         return (
             <CartContext.Consumer>
             { (cartCtx) => {
-                const {items, totalAmount, addToCart, removeFromCart, setCartAttribute} = cartCtx;
+                const {items, totalAmount, addToCart, removeFromCart, setCartAttribute, isCartOverlayVisible} = cartCtx;
                 
                 return(
                     <div className='cart-items'>
@@ -34,6 +35,7 @@ export default class CartComponent extends Component {
                             pricePropsStr={totalAmount} 
                             activeCurrency={activeCurrency}/>
                         </div>
+                        {!isCartOverlayVisible && <Button h='50px' w='220px'>CHECK OUT</Button>}
                     </div>
                 )
             }}

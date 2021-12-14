@@ -19,6 +19,7 @@ export default class Header extends Component {
                         activeCategory={ctx.activeCategory}/>
                         <Link to='/'><img alt='header-logo' className='header-logo' src={headerLogo}/></Link>
                         <CurrencyCartContainer
+                        createActiveCurrencyObj={ctx.createActiveCurrencyObj}
                         changeActiveCurrency={ctx.changeActiveCurrency} 
                         currencies={ctx.currencies} 
                         activeCurrency={ctx.activeCurrency}

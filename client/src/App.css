@@ -5,6 +5,8 @@ body{
     color: #1D1F22;
     background: #ffffff;
     margin: 0;
+    position: relative;
+    height: 100%;
 }
 a{
     text-decoration: none;

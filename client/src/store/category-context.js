@@ -16,6 +16,7 @@ const CategoryContext = React.createContext({
     changeActiveCategory: ()=>{},
     changeActiveCurrency: ()=>{},
     getProducts: ()=>{},
+    createActiveCurrencyObj: ()=>{}
 });
 
 export  class CategoryContextProvider extends Component {
@@ -135,9 +136,13 @@ export  class CategoryContextProvider extends Component {
             
         })
     }
-    changeActiveCurrency = (currency) => {
+    createActiveCurrencyObj = (currency) => {
         const {currencies} = this.state;
         const currencyObj = currencies.filter((cur)=> cur.value === currency)[0];
+        return currencyObj
+    }
+    changeActiveCurrency = (currency) => {
+        const currencyObj = this.createActiveCurrencyObj(currency);
         this.setState({activeCurrency: currencyObj})
     }
     changeActiveCategory = (categ) => {
@@ -150,6 +155,7 @@ export  class CategoryContextProvider extends Component {
             changeActiveCategory: this.changeActiveCategory,
             changeActiveCurrency: this.changeActiveCurrency,
             getProducts: this.getProducts,
+            createActiveCurrencyObj: this.createActiveCurrencyObj
         }
         return (
             <CategoryContext.Provider value={contextValue}>

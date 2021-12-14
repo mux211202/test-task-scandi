@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 
 const CartContext = React.createContext({
     items:[],
-    totalAmount: 0,
+    totalAmount: '$ 0',
     addToCart: ()=>{},
     removeFromCart: ()=>{},
     setCartAttribute: ()=>{},
-    setTotalAmount: ()=>{}
+    setTotalAmount: ()=>{},
+    isCartOverlayVisible: false,
+    toggleCartOverlay: ()=>{}
 });
 
 export  class CartContextProvider extends Component {
@@ -14,22 +16,33 @@ export  class CartContextProvider extends Component {
         super();
         this.state={
             items:[],
-            totalAmount: '$0', 
+            totalAmount: '$ 0', 
             addToCart: ()=>{},
-            removeFromCart: ()=>{}
+            removeFromCart: ()=>{},
+            isCartOverlayVisible: false
         }
     }
-    setTotalAmount=(items, activeCurrency)=>{
+    toggleCartOverlay = () => {
+        this.setState(({isCartOverlayVisible}) => {
+            const newDisplay = !isCartOverlayVisible;
+            return {
+                isCartOverlayVisible: newDisplay
+            }
+        })
+    }
+    setTotalAmount = (items, activeCurrency) => {
+        const amountStr = this.countTotalAmount(items, activeCurrency);
+        this.setState({totalAmount: amountStr})
+    }
+    countTotalAmount=(items, activeCurrency)=>{
         if(items.length > 0) {
             const activeCurrencyPrices = items.map(item =>{
                 const activePrice = item.prices.filter(pirce =>pirce.currency === activeCurrency.value)[0].amount;
                 return activePrice*item.amount
             });
             const sum = activeCurrencyPrices.reduce((prevVal, currentVal) => prevVal +currentVal).toFixed(2);
-            const amountStr = `${activeCurrency.string.slice(0,1)}${sum}`;
-            this.setState({
-                totalAmount: amountStr
-            })
+            const amountStr = `${activeCurrency.string.slice(0,1)} ${sum}`;
+            return amountStr
         }else{
             return
         }
@@ -80,28 +93,29 @@ export  class CartContextProvider extends Component {
             } else{
                 updatedItems = items.concat({...item, attributes, amount: 1});
             }
-            this.setTotalAmount(updatedItems, activeCurrency);
+            const newTotal = this.countTotalAmount(updatedItems, activeCurrency);
             return {
+                totalAmount: newTotal,
                 items: updatedItems
             };
         })
     }
     removeFromCart = (item, activeCurrency) => {
-        this.setState(({items, totalAmount}) =>{
+        this.setState(({items}) =>{
             const itemIndex = items.findIndex(itemInArr => {
                 if(itemInArr.attributes && item.attributes && itemInArr.id === item.id){
                     return this.checkEqualAttributes(itemInArr.attributes, item.attributes);
                 }
             });
             let updatedItems;
-            let updatedTotalAmount = 0;
+            let updatedTotalAmount;
             if(item.amount === 1){
                 updatedItems = [...items];
                 updatedItems.splice(itemIndex, 1);
                 if(items.length === 1){
-                    updatedTotalAmount = `${activeCurrency.string.slice(0,1)}0`;
+                    updatedTotalAmount = `${activeCurrency.string.slice(0,1)} 0`;
                 }else{ 
-                    updatedTotalAmount = this.setTotalAmount(updatedItems, activeCurrency);   
+                    updatedTotalAmount = this.countTotalAmount(updatedItems, activeCurrency);   
                 }
             }else{
                 updatedItems = [...items];
@@ -110,9 +124,10 @@ export  class CartContextProvider extends Component {
                     amount: items[itemIndex].amount -1
                 }
                 updatedItems[itemIndex] = updatedItem;
+                updatedTotalAmount = this.countTotalAmount(updatedItems, activeCurrency);
             }
-            console.log(updatedTotalAmount)
             return {
+                totalAmount: updatedTotalAmount,
                 items: updatedItems
             };
         })
@@ -144,7 +159,8 @@ export  class CartContextProvider extends Component {
             addToCart: this.addToCart,
             removeFromCart: this.removeFromCart,
             setCartAttribute: this.setCartAttribute,
-            setTotalAmount: this.setTotalAmount
+            setTotalAmount: this.setTotalAmount,
+            toggleCartOverlay: this.toggleCartOverlay
         }
         return (
             <CartContext.Provider value={contextValue}>

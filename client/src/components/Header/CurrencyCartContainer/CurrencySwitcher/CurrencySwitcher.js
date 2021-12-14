@@ -2,9 +2,11 @@ import React, { Component } from 'react'
 
 export default class CurrencySwitcher extends Component {
     onCurrencyChangeHandler = (e) => {
-        const {changeActiveCurrency} = this.props;
-        const newCurrency = e.target.value;
-        changeActiveCurrency(newCurrency)
+        const {changeActiveCurrency, items, setTotalAmount, createActiveCurrencyObj} = this.props;
+        const target = e.target.value;
+        const newCurrency = createActiveCurrencyObj(target); // this function is needed to create currency obj before state update to pass obj as an argument
+        setTotalAmount(items, newCurrency);
+        changeActiveCurrency(target);
     }
     render() {
         const { currencies, activeCurrency } = this.props;

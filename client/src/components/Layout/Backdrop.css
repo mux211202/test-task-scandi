@@ -1,0 +1,16 @@
+#backdrop-root{
+    position: absolute;
+    top: 82px;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+}
+.backdrop{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    background: rgba(57, 55, 72, .22);
+    z-index: 2;
+}
