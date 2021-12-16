@@ -11,7 +11,7 @@ export default class CurrencyCartContainer extends Component {
             <CartContext.Consumer>
                 {
                 (cartCtx)=>{
-                    const {setTotalAmount, items, toggleCartOverlay, isCartOverlayVisible  } = cartCtx;
+                    const {setTotalAmount, items, toggleCartOverlay, isCartOverlayVisible, logCheckout} = cartCtx;
                     const length = items.length;
                     return (
                     <>
@@ -29,6 +29,7 @@ export default class CurrencyCartContainer extends Component {
                         </div>
                         <div className='cart-overlay-container'>
                             {isCartOverlayVisible ? <CartOverlay
+                                                    logCheckout={logCheckout}
                                                     toggleCartOverlay={toggleCartOverlay}  
                                                     itemsCount={length} 
                                                     activeCurrency={activeCurrency}/>

@@ -23,7 +23,7 @@ export  class CategoryContextProvider extends Component {
     constructor(){
         super();
         this.state={
-            activeCategory:'all',
+            activeCategory:'',
             activeCurrency: {value: 'USD', string:'$ USD'},
             products:[],
             categories:[],
@@ -69,8 +69,12 @@ export  class CategoryContextProvider extends Component {
         })
     }
     componentDidMount(){
-        this.getAllCurrencies()
+        this.getAllCurrencies();
         this.getAllCategories();
+        const sessionCurrency = JSON.parse(sessionStorage.getItem('activeCurrency'));
+        if(sessionCurrency){
+            this.changeActiveCurrency(sessionCurrency);
+        }
     }
     getAllProducts =() =>{ //a method that is used in getProducts method, just to do it shorter
         const {categories} = this.state;
@@ -142,8 +146,12 @@ export  class CategoryContextProvider extends Component {
         return currencyObj
     }
     changeActiveCurrency = (currency) => {
-        const currencyObj = this.createActiveCurrencyObj(currency);
-        this.setState({activeCurrency: currencyObj})
+        if(typeof currency === 'string'){
+            const currencyObj = this.createActiveCurrencyObj(currency);   
+            this.setState({activeCurrency: currencyObj})
+        }else{
+            this.setState({activeCurrency: currency})
+        }
     }
     changeActiveCategory = (categ) => {
         this.setLoadedCategory(categ);

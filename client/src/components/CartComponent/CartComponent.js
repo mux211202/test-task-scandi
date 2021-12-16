@@ -10,11 +10,12 @@ export default class CartComponent extends Component {
         return (
             <CartContext.Consumer>
             { (cartCtx) => {
-                const {items, totalAmount, addToCart, removeFromCart, setCartAttribute, isCartOverlayVisible} = cartCtx;
-                
+                const {items, totalAmount, addToCart, removeFromCart, setCartAttribute, isCartOverlayVisible, logCheckout} = cartCtx;
+                const itemsCount = items.length;
                 return(
+                    <>
                     <div className='cart-items'>
-                        {items.length > 0 ? items.map((item, i)=>{
+                        {itemsCount > 0 ? items.map((item, i)=>{
                             const attributeValuesStr = item.attributes.map((attribute)=>attribute.selectedValueIndex).join("");//for unique key
                             return(
                                 <CartItem
@@ -29,14 +30,16 @@ export default class CartComponent extends Component {
                         }
                         ) : <p>No products in cart</p>}
                         <div className='grey-hl'></div>
-                        <div className='total-amount'>
-                            <span>Total: </span>
-                            <Price
-                            pricePropsStr={totalAmount} 
-                            activeCurrency={activeCurrency}/>
-                        </div>
-                        {!isCartOverlayVisible && <Button h='50px' w='220px'>CHECK OUT</Button>}
+                        
+                        {!isCartOverlayVisible && <Button btnClass={itemsCount > 0 ? '' : 'blocked'} onClick={logCheckout} h='50px' w='220px'>CHECK OUT</Button>}
                     </div>
+                    <div className='total-amount'>
+                        <span>Total: </span>
+                        <Price
+                        pricePropsStr={totalAmount} 
+                        activeCurrency={activeCurrency}/>
+                    </div>
+                    </>
                 )
             }}
             </CartContext.Consumer>

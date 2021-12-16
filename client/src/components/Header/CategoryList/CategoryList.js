@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {NavLink} from 'react-router-dom';
 export default class CategoryList extends Component {
+    
     onClickHandler=(e)=>{
         const value = e.target.innerHTML;
         const {changeActiveCategory, getProducts, categories} = this.props;

@@ -8,10 +8,18 @@
     right: -5px;
     top: 0px;
     width: 325px;
+    max-height: 550px;
     margin-top: 42px;
     font-size: 16px;
     padding: 16px;
+    overflow: hidden;
 }
+.cart-overlay .cart-items{
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 350px;
+}
+
 .bold{
     font-weight: 700;
 }
@@ -48,13 +56,21 @@
 .cart-overlay .amount-controller-item{
     width: 24px;
     height: 24px;
+    font-size: 30px;
+    font-weight: 300;
 }
 .cart-overlay .amount-controller{
     height: 100%;
 }
+.cart-overlay .amount{
+    font-size: 19px;
+}
 .cart-overlay .cart-item-img{
     width: 105px;
     height: 135px;
+}
+.cart-overlay .styled-btn{
+    font-weight: 300;
 }
 .cart-overlay-btns{
     display: flex;

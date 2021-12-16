@@ -7,3 +7,6 @@
     border: none;
     cursor: pointer;
 }
+.styled-btn.blocked{
+    background: #7a7b7c;
+}

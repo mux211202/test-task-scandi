@@ -6,6 +6,7 @@ import './Header.css';
 import headerLogo from '../../img/header_logo.svg';
 import CurrencyCartContainer from './CurrencyCartContainer/CurrencyCartContainer';
 export default class Header extends Component {
+    
     render() {
         return (
             <CategoryContext.Consumer>

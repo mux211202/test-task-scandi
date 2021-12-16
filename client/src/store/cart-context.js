@@ -8,7 +8,8 @@ const CartContext = React.createContext({
     setCartAttribute: ()=>{},
     setTotalAmount: ()=>{},
     isCartOverlayVisible: false,
-    toggleCartOverlay: ()=>{}
+    toggleCartOverlay: ()=>{},
+    logCheckout: ()=>{}
 });
 
 export  class CartContextProvider extends Component {
@@ -22,9 +23,27 @@ export  class CartContextProvider extends Component {
             isCartOverlayVisible: false
         }
     }
+    componentDidMount(){
+        const sessionItems = JSON.parse(sessionStorage.getItem('items'));
+        const sessionTotal = JSON.parse(sessionStorage.getItem('total'));
+        if(sessionItems){
+            this.setState({items: sessionItems, totalAmount: sessionTotal })
+        }else{
+            return
+        }
+    }
+    updateSessionStorage = (data, dataType) => {
+        const jsonItems = JSON.stringify(data);
+        sessionStorage.setItem(`${dataType}`, jsonItems);
+    }
     toggleCartOverlay = () => {
         this.setState(({isCartOverlayVisible}) => {
             const newDisplay = !isCartOverlayVisible;
+            if(!isCartOverlayVisible){
+                document.body.style.overflow = 'hidden';
+            }else{
+                document.body.style.overflow = 'auto';
+            }
             return {
                 isCartOverlayVisible: newDisplay
             }
@@ -32,6 +51,8 @@ export  class CartContextProvider extends Component {
     }
     setTotalAmount = (items, activeCurrency) => {
         const amountStr = this.countTotalAmount(items, activeCurrency);
+        this.updateSessionStorage(amountStr, 'total');
+        this.updateSessionStorage(activeCurrency, 'activeCurrency');
         this.setState({totalAmount: amountStr})
     }
     countTotalAmount=(items, activeCurrency)=>{
@@ -44,9 +65,9 @@ export  class CartContextProvider extends Component {
             const amountStr = `${activeCurrency.string.slice(0,1)} ${sum}`;
             return amountStr
         }else{
-            return
-        }
-        
+            const amountStr = `${activeCurrency.string.slice(0,1)} 0`;
+            return amountStr
+        }    
     };
     setCartDefaultAttributes = (attributes) => {
         const newAttributes = attributes.map(attribute => {
@@ -94,6 +115,8 @@ export  class CartContextProvider extends Component {
                 updatedItems = items.concat({...item, attributes, amount: 1});
             }
             const newTotal = this.countTotalAmount(updatedItems, activeCurrency);
+            this.updateSessionStorage(updatedItems, 'items');
+            this.updateSessionStorage(newTotal, 'total');
             return {
                 totalAmount: newTotal,
                 items: updatedItems
@@ -108,14 +131,14 @@ export  class CartContextProvider extends Component {
                 }
             });
             let updatedItems;
-            let updatedTotalAmount;
+            let newTotal;
             if(item.amount === 1){
                 updatedItems = [...items];
                 updatedItems.splice(itemIndex, 1);
                 if(items.length === 1){
-                    updatedTotalAmount = `${activeCurrency.string.slice(0,1)} 0`;
+                    newTotal = `${activeCurrency.string.slice(0,1)} 0`;
                 }else{ 
-                    updatedTotalAmount = this.countTotalAmount(updatedItems, activeCurrency);   
+                    newTotal = this.countTotalAmount(updatedItems, activeCurrency);   
                 }
             }else{
                 updatedItems = [...items];
@@ -124,10 +147,12 @@ export  class CartContextProvider extends Component {
                     amount: items[itemIndex].amount -1
                 }
                 updatedItems[itemIndex] = updatedItem;
-                updatedTotalAmount = this.countTotalAmount(updatedItems, activeCurrency);
+                newTotal = this.countTotalAmount(updatedItems, activeCurrency);
             }
+            this.updateSessionStorage(updatedItems, 'items');
+            this.updateSessionStorage(newTotal, 'total');
             return {
-                totalAmount: updatedTotalAmount,
+                totalAmount: newTotal,
                 items: updatedItems
             };
         })
@@ -147,11 +172,23 @@ export  class CartContextProvider extends Component {
             const updatedItem = {...item, attributes: newAtributes};
             const updatedItems = [...items];
             updatedItems[itemIndex] = updatedItem;
+            this.updateSessionStorage(updatedItems, 'items');
             return {
                 items: updatedItems
             }
                
         });
+    }
+    logCheckout = () => {
+        const {items, totalAmount} = this.state;
+        if(items.length > 0){
+            console.log('User has ordered these items:');
+            console.log(items);
+            console.log('User needs to pay:');
+            console.log(totalAmount)
+        }else{
+            return
+        }
     }
     render() {
         const contextValue = {
@@ -160,7 +197,8 @@ export  class CartContextProvider extends Component {
             removeFromCart: this.removeFromCart,
             setCartAttribute: this.setCartAttribute,
             setTotalAmount: this.setTotalAmount,
-            toggleCartOverlay: this.toggleCartOverlay
+            toggleCartOverlay: this.toggleCartOverlay,
+            logCheckout: this.logCheckout
         }
         return (
             <CartContext.Provider value={contextValue}>

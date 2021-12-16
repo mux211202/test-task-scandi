@@ -12,6 +12,10 @@ export default class CategoryPage extends Component {
             changeActiveCategory(urlCategory);
         }
     }
+    componentWillUnmount(){
+        const {changeActiveCategory} = this.props;
+        changeActiveCategory({});
+    }
     productsSortFunction = (a, b) => {
         const nameA=a.name.toLowerCase(), nameB=b.name.toLowerCase()
         

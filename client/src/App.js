@@ -7,7 +7,6 @@ import CategoryPage from './pages/CategoryPage';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
 export default class App extends Component {
-	 
 	 render() {
 		 return (
 			 <CategoryContext.Consumer>
