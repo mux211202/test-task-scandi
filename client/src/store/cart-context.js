@@ -32,10 +32,12 @@ export  class CartContextProvider extends PureComponent {
             return
         }
     }
+
     updateSessionStorage = (data, dataType) => {
         const jsonItems = JSON.stringify(data);
         sessionStorage.setItem(`${dataType}`, jsonItems);
     }
+
     toggleCartOverlay = () => {
         this.setState(({isCartOverlayVisible}) => {
             const newDisplay = !isCartOverlayVisible;
@@ -49,12 +51,14 @@ export  class CartContextProvider extends PureComponent {
             }
         })
     }
+
     setTotalAmount = (items, activeCurrency) => { // this functions sets total amount state
         const amountStr = this.countTotalAmount(items, activeCurrency);
         this.updateSessionStorage(amountStr, 'total');
         this.updateSessionStorage(activeCurrency, 'activeCurrency');
         this.setState({totalAmount: amountStr})
     }//two functions are done not to call sate update in addToCart function
+
     countTotalAmount=(items, activeCurrency)=>{ // this function calculates total amount
         if(items.length > 0) {  
             const activeCurrencyPrices = items.map(item =>{
@@ -69,12 +73,14 @@ export  class CartContextProvider extends PureComponent {
             return amountStr
         }    
     };
+
     setCartDefaultAttributes = (attributes) => { //sets all attributes to first position if user added item to the cart from category page
         const newAttributes = attributes.map(attribute => {
             return {...attribute, selectedValueIndex: 0}
         }); 
         return newAttributes
     }
+
     checkEqualAttributes = (existingItemAttributes, attributes)=>{//checks if items have similar attributes
         let equalAttributesCounter = 0;
         let isAttributesEqual = false;
@@ -91,6 +97,7 @@ export  class CartContextProvider extends PureComponent {
         }
         
     }
+
     findItemIndex = (items, item) =>{
         const itemIndex = items.findIndex(itemInArr => {
             if(itemInArr.attributes && item.attributes && itemInArr.id === item.id){
@@ -101,6 +108,7 @@ export  class CartContextProvider extends PureComponent {
         });
         return itemIndex
     }
+
     addToCart = (item, activeCurrency, attributes = false) => {
         this.setState(({items})=>{
             if(!attributes){ // if user added item from category page sets default attributes
@@ -129,6 +137,7 @@ export  class CartContextProvider extends PureComponent {
             };
         })
     }
+
     removeFromCart = (item, activeCurrency) => {
         this.setState(({items}) =>{
             const itemIndex = this.findItemIndex(items, item);
@@ -159,6 +168,7 @@ export  class CartContextProvider extends PureComponent {
             };
         })
     }
+
     setCartAttribute = (item, attributeName, index) => {//function, that chages item's attributes in cart
         this.setState(({items})=>{
             const itemIndex = this.findItemIndex(items, item);
@@ -177,6 +187,7 @@ export  class CartContextProvider extends PureComponent {
                
         });
     }
+
     logCheckout = () => { // console logs information about order: checkout click
         const {items, totalAmount} = this.state;
         if(items.length > 0){
@@ -188,6 +199,7 @@ export  class CartContextProvider extends PureComponent {
             return
         }
     }
+    
     render() {
         const contextValue = {
             ...this.state,

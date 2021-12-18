@@ -12,31 +12,32 @@ export default class App extends PureComponent {
 		 return (
 			 <CategoryContext.Consumer>
 				{(ctx)=>{
+				const {categories, activeCurrency, products, error, changeActiveCategory, getProducts, setError} = ctx;
 				return(
 					<div className='container'>
 						<Header/>
 						<Switch>
-							{ctx.categories.length > 0 ? //we start to mount this component when categories are loaded
+							{categories.length > 0 ? //we start to mount this component when categories are loaded
 								<Route exact path='/category/:id' 
 								render={({match}) =>{
 									return(
 									<CategoryPage
-									setError={ctx.setError}
-									error={ctx.error}
-									categories={ctx.categories}
-									activeCurrency={ctx.activeCurrency}
-									products={ctx.products}
+									setError={setError}
+									error={error}
+									categories={categories}
+									activeCurrency={activeCurrency}
+									products={products}
 									urlCategory={match.params.id} 
-									changeActiveCategory={ctx.changeActiveCategory}
-									getProducts={ctx.getProducts}/>
+									changeActiveCategory={changeActiveCategory}
+									getProducts={getProducts}/>
 								)}}/> : null
 							}
 							<Route path='/product/:id' exact
 								render={({match})=>{
 									return(
 										<ProductPage
-										activeCurrency={ctx.activeCurrency}
-										products={ctx.products} 
+										activeCurrency={activeCurrency}
+										products={products} 
 										productId={match.params.id}/>
 									)
 								}}
@@ -44,7 +45,7 @@ export default class App extends PureComponent {
 							<Route path='/cart' exact
 								render={()=>{
 									return(
-										<CartPage activeCurrency={ctx.activeCurrency}/>
+										<CartPage activeCurrency={activeCurrency}/>
 									)
 								}}
 							/>

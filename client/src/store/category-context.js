@@ -32,9 +32,20 @@ export  class CategoryContextProvider extends PureComponent {
             error:''
         }
     }
+
+    componentDidMount(){
+        this.getAllCurrencies();
+        this.getAllCategories();
+        const sessionCurrency = JSON.parse(sessionStorage.getItem('activeCurrency'));
+        if(sessionCurrency){
+            this.changeActiveCurrency(sessionCurrency);
+        }
+    }
+
     setError=(error)=>{
         this.setState({error});
     }
+
     getAllCategories = () =>{//set category array
         const allCategory = {__typename: 'Category', name:'all', loaded: false, index: 0}//create an all category object
         client.query({
@@ -47,6 +58,7 @@ export  class CategoryContextProvider extends PureComponent {
             this.setState({categories: resArr});
         })
     }
+
     getAllCurrencies = () =>{//set all currencies array
         client.query({
             query: CURRENCIES
@@ -74,14 +86,7 @@ export  class CategoryContextProvider extends PureComponent {
             this.setState({currencies: newCurrencies})
         })
     }
-    componentDidMount(){
-        this.getAllCurrencies();
-        this.getAllCategories();
-        const sessionCurrency = JSON.parse(sessionStorage.getItem('activeCurrency'));
-        if(sessionCurrency){
-            this.changeActiveCurrency(sessionCurrency);
-        }
-    }
+
     getAllProducts =() =>{ //a method that is used in getProducts method, just to do it shorter
         const {categories} = this.state;
         const categArr = categories.filter(elem=> elem.name !== 'all');
@@ -102,6 +107,7 @@ export  class CategoryContextProvider extends PureComponent {
 				}));
 		})
     }
+
     getProducts = (categ) => {
         if(categ === 'all'){
             this.getAllProducts();
@@ -118,6 +124,7 @@ export  class CategoryContextProvider extends PureComponent {
             })
         }
     }
+
     setLoadedCategory = (categ) =>{//this function is needed to remember what categories user has already loaded
         this.setState(({categories}) =>{
             let categArr = [];
@@ -146,6 +153,7 @@ export  class CategoryContextProvider extends PureComponent {
             
         })
     }
+
     createActiveCurrencyObj = (currency) => {//this function is needed to create currency object outside this file
         const {currencies} = this.state;
         const currencyObj = currencies.filter((cur)=> cur.value === currency)[0];
@@ -159,6 +167,7 @@ export  class CategoryContextProvider extends PureComponent {
             this.setState({activeCurrency: currency})
         }
     }
+
     changeActiveCategory = (categ) => {
         this.setLoadedCategory(categ);
         this.setState(({activeCategory, categories}) =>{
@@ -178,6 +187,7 @@ export  class CategoryContextProvider extends PureComponent {
             }
         });
     }
+    
     render() {
         const contextValue = {
             ...this.state, 

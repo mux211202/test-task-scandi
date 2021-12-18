@@ -27,6 +27,7 @@ export  class ProductContextProvider extends PureComponent {
             error:''
         }
     }
+
     setAllSettedProducts = (productId, allSettedProducts, attributes) => {//set products that we have already loaded
         const productIndInArr = allSettedProducts.findIndex((product)=> product.id === productId);
         const productsLen = allSettedProducts.length;
@@ -36,6 +37,7 @@ export  class ProductContextProvider extends PureComponent {
                                     ...allSettedProducts.slice(productIndInArr+1, productsLen)];
         return newSettedProducts
     }
+
     setAttributeValue = (product, attributeName, index) => {
         this.setState(({attributes, allSettedProducts})=>{
             const attributeIndex  = attributes.findIndex(attribute => attribute.name === attributeName);
@@ -50,6 +52,7 @@ export  class ProductContextProvider extends PureComponent {
                
         });
     }
+
     setDefaultAttributes = (product) => {
         const {attributes} = product;
         const newAttributes = attributes.map(attribute => {
@@ -57,6 +60,7 @@ export  class ProductContextProvider extends PureComponent {
         });
         return newAttributes
     }
+
     setActiveProduct = (productData) => {
         this.setState(({allSettedProducts}) => {
             const attributes = this.setDefaultAttributes(productData);
@@ -79,6 +83,7 @@ export  class ProductContextProvider extends PureComponent {
             }
         })
     }
+    
     getActiveProduct = (productId) => {
         client.query({
             query: productQuery(productId)
