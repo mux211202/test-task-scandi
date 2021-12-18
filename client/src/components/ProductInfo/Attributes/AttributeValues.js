@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 
-export default class AttributeValues extends Component {
+export default class AttributeValues extends PureComponent {
     render() {
         const {items, type, selectedValueIndex, name} = this.props.attribute;
         const {setAttributeValue, productData} = this.props;

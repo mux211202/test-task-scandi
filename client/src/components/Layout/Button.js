@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import './Button.css';
-export default class Button extends Component {
+export default class Button extends PureComponent {
     render() {
         const {w, h, children, onClick, btnClass} = this.props;
         return (

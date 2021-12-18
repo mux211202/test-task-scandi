@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 
-export default class CurrencySwitcher extends Component {
+export default class CurrencySwitcher extends PureComponent {
     onCurrencyChangeHandler = (e) => {
         const {changeActiveCurrency, items, setTotalAmount, createActiveCurrencyObj} = this.props;
         const target = e.target.value;

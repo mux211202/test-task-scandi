@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 
-export default class Price extends Component {
+export default class Price extends PureComponent {
     render() {
         const {prices, activeCurrency, amount, pricePropsStr} = this.props;
         let priceString;

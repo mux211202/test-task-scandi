@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import CartComponent from '../components/CartComponent/CartComponent';
 
-export default class CartPage extends Component {
+export default class CartPage extends PureComponent {
     render() {
         const {activeCurrency} = this.props;
         return (

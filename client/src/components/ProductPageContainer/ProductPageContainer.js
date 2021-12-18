@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 
-export default class ProductPageContainer extends Component {
+export default class ProductPageContainer extends PureComponent {
     componentDidMount(){
         const { getActiveProduct, productId, products, setActiveProduct } = this.props;
         const productIndex = products.findIndex(product => productId === product.id );

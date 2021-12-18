@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import "./ProductCard.css";
 import cartIcon from "../../img/product-cart-icon.svg";
 import Price from '../Price/Price';
 import CartContext from '../../store/cart-context';
-export default class ProductCard extends Component {
+export default class ProductCard extends PureComponent {
     render() {
         const {prices, name, gallery, id, inStock} = this.props.data;
         const {activeCurrency, data, activeCategory} = this.props;
@@ -24,7 +24,11 @@ export default class ProductCard extends Component {
                                     </div>
                                 {!inStock && <div className= 'out-of-stock'>OUT OF STOCK</div>}
                             </Link>
-                            {inStock && <img onClick={()=>{console.log(data); addToCart(data, activeCurrency)}}className="product-cart-icon" src={cartIcon}/>}
+                            {inStock && <img 
+                                        alt=''
+                                        onClick={()=>{console.log(data); addToCart(data, activeCurrency)}} 
+                                        className="product-cart-icon" 
+                                        src={cartIcon}/>}
                         </div>
                     )}
                 }

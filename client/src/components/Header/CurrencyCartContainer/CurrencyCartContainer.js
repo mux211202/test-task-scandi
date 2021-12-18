@@ -1,10 +1,9 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import CurrencySwitcher from './CurrencySwitcher/CurrencySwitcher';
 import CartLogo from '../../../img/cart_logo.svg';
 import CartContext from '../../../store/cart-context';
-import { Link } from 'react-router-dom';
 import CartOverlay from '../../CartOverlay/CartOverlay';
-export default class CurrencyCartContainer extends Component {
+export default class CurrencyCartContainer extends PureComponent {
     render() {
         const {activeCurrency, currencies, changeActiveCurrency, createActiveCurrencyObj} = this.props;
         return (
@@ -25,7 +24,7 @@ export default class CurrencyCartContainer extends Component {
                         changeActiveCurrency={changeActiveCurrency}/>
                         <div onClick={toggleCartOverlay} className='header-cart-logo'>
                             {length>0 && <div className='cart-items-counter'>{length}</div>}
-                            <img src={CartLogo} atl='cart-logo'/>
+                            <img src={CartLogo} alt='cart-logo'/>
                         </div>
                         <div className='cart-overlay-container'>
                             {isCartOverlayVisible ? <CartOverlay

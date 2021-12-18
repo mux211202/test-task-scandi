@@ -14,6 +14,7 @@ class GaleryMainImage extends PureComponent {
                                 src={src} 
                                 alt='main img' />)
                         }
+                        return null
                     })
                 }
             </div>

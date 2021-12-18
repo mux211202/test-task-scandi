@@ -40,6 +40,7 @@
     justify-content: center;
     align-items: center;
     transition: 0.3s all ease;
+    user-select: none;
 }
 .attribute-value.active{
     background: #000;

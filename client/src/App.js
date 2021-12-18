@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import CategoryContext from './store/category-context';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import './App.css';
@@ -6,7 +6,8 @@ import Header from './components/Header/Header';
 import CategoryPage from './pages/CategoryPage';
 import ProductPage from './pages/ProductPage';
 import CartPage from './pages/CartPage';
-export default class App extends Component {
+import PageNotFound from './pages/PageNotFound';
+export default class App extends PureComponent {
 	 render() {
 		 return (
 			 <CategoryContext.Consumer>
@@ -20,6 +21,8 @@ export default class App extends Component {
 								render={({match}) =>{
 									return(
 									<CategoryPage
+									setError={ctx.setError}
+									error={ctx.error}
 									categories={ctx.categories}
 									activeCurrency={ctx.activeCurrency}
 									products={ctx.products}
@@ -49,7 +52,7 @@ export default class App extends Component {
 								<Redirect to='/category/all'/>
 							</Route>
 							<Route path='*' exact>
-								<Redirect to='/category/all'/>
+								<PageNotFound/>
 							</Route>
 						</Switch>
 					</div>
