@@ -65,10 +65,7 @@
 .cart-overlay .amount{
     font-size: 19px;
 }
-.cart-overlay .cart-item-img{
-    width: 105px;
-    height: 135px;
-}
+
 .cart-overlay .styled-btn{
     font-weight: 300;
 }

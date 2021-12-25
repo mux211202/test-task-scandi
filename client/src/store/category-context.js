@@ -116,7 +116,7 @@ export  class CategoryContextProvider extends Component {
         this.setState(({categories}) =>{
             let categArr = [];
             const categObj = categories.filter(category => category.name === categ)[0];
-            if (categories[0].loaded || categObj.loaded || categObj === undefined){
+            if (categObj === undefined || categObj.loaded){
                 return
             }else if(categ === 'all'){
                 categArr = categories.map((category) => {return {...category, loaded: true}})

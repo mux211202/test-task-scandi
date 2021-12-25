@@ -6,7 +6,7 @@ export default class CategoryList extends Component {
         const value = e.target.innerHTML;
         const {changeActiveCategory, getProducts, categories} = this.props;
         const categoryObj = categories.filter(category => category.name === value)[0];
-        if(categories[0].loaded || categoryObj.loaded || categoryObj === undefined){
+        if(categoryObj === undefined || categoryObj.loaded){
             changeActiveCategory(value);
         }else{
             getProducts(value);

@@ -43,18 +43,49 @@
 
 }
 .currency-select-container{
-    width: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
     margin-right: 20px;
+    position: relative;
+}
+.value{
+    font-weight: 500;
+    font-size: 18px; 
+    color: #1D1F22;
 }
 .currency-select{
+    position: absolute;
+    padding: 15px 40px 20px 20px;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
     font-family: Raleway;
     font-weight: 600;
     font-size: 18px;
     text-align: center;
     line-height: 30px;
-    width: 100%;
+    width: 54px;
     outline: none;
     border: none;
+}
+.currency-select-switcher{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) rotate(180deg);
+    right: 0;
+    transition: .3s all ease;
+    cursor: pointer;
+}
+.currency-select-item{
+    height: 29px;
+    transition: .3s all ease;
+}
+.currency-select-item:hover{
+    transform: scale(1.1);
+    cursor: pointer;
 }
 .header-cart-logo{
     position: relative;

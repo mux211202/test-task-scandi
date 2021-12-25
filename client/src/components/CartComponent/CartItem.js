@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Price from '../Price/Price';
 import Attributes from '../ProductInfo/Attributes/Attributes';
+import CartGalery from '../CartGalery/CartGalery';
 export default class CartItem extends Component {
     plusOnClickHandler = () => {
         const {addToCart, productData, activeCurrency} = this.props;
@@ -21,7 +22,7 @@ export default class CartItem extends Component {
                     <div className='product-name'>{name}</div>
                     <div className='product-brand'>{brand}</div>
                     <div className='product-price'>
-                        <Price prices={prices} activeCurrency={activeCurrency} amount={amount}/>
+                        <Price prices={prices} activeCurrency={activeCurrency}/>
                     </div>
                     <Attributes
                         productData={productData} 
@@ -36,7 +37,7 @@ export default class CartItem extends Component {
                         <div className='amount-controller-item' onClick={this.minusOnClickHandler}>-</div>
                     </div>
                     <div className='mini-gallery'>
-                        <img className='cart-item-img' alt='cart-product' src={`${gallery[0]}`}/>
+                        <CartGalery galeryData={gallery}/>
                     </div>
                 </div>
             </div>

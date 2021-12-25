@@ -14,7 +14,16 @@
     height: 330px;
     object-fit: scale-down;
 }
-
+.product-card-name{
+    font-weight: 300;
+    font-size: 18px;
+    margin-top: 3px;
+}
+.product-card-brand{
+    margin-top: 15px;
+    font-weight: 300;
+    font-size: 18px;
+}
 .product-card-price{
     font-weight: 500;
     font-size: 18px;

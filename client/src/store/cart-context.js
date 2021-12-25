@@ -20,14 +20,16 @@ export  class CartContextProvider extends Component {
             totalAmount: '$ 0', 
             addToCart: ()=>{},
             removeFromCart: ()=>{},
-            isCartOverlayVisible: false
+            isCartOverlayVisible: false,
+            itemsCount:0
         }
     }
     componentDidMount(){
         const sessionItems = JSON.parse(sessionStorage.getItem('items'));
         const sessionTotal = JSON.parse(sessionStorage.getItem('total'));
+        const sessionItemsCount = JSON.parse(sessionStorage.getItem('itemsCount'));
         if(sessionItems){
-            this.setState({items: sessionItems, totalAmount: sessionTotal })
+            this.setState({items: sessionItems, totalAmount: sessionTotal, itemsCount: sessionItemsCount })
         }else{
             return
         }
@@ -92,7 +94,7 @@ export  class CartContextProvider extends Component {
         
     }
     addToCart = (item, activeCurrency, attributes = false) => {
-        this.setState(({items})=>{
+        this.setState(({items, itemsCount})=>{
             if(!attributes){
                 attributes = this.setCartDefaultAttributes(item.attributes);
             }
@@ -117,14 +119,17 @@ export  class CartContextProvider extends Component {
             const newTotal = this.countTotalAmount(updatedItems, activeCurrency);
             this.updateSessionStorage(updatedItems, 'items');
             this.updateSessionStorage(newTotal, 'total');
+            const newItemsCount = itemsCount+1;
+            this.updateSessionStorage(newItemsCount, 'itemsCount');
             return {
                 totalAmount: newTotal,
-                items: updatedItems
+                items: updatedItems,
+                itemsCount: newItemsCount
             };
         })
     }
     removeFromCart = (item, activeCurrency) => {
-        this.setState(({items}) =>{
+        this.setState(({items, itemsCount}) =>{
             const itemIndex = items.findIndex(itemInArr => {
                 if(itemInArr.attributes && item.attributes && itemInArr.id === item.id){
                     return this.checkEqualAttributes(itemInArr.attributes, item.attributes);
@@ -151,9 +156,12 @@ export  class CartContextProvider extends Component {
             }
             this.updateSessionStorage(updatedItems, 'items');
             this.updateSessionStorage(newTotal, 'total');
+            const newItemsCount = itemsCount-1;
+            this.updateSessionStorage(newItemsCount, 'itemsCount');
             return {
                 totalAmount: newTotal,
-                items: updatedItems
+                items: updatedItems,
+                itemsCount: newItemsCount
             };
         })
     }
@@ -170,8 +178,21 @@ export  class CartContextProvider extends Component {
             const len = attributes.length;
             const newAtributes = [...attributes.slice(0,attributeIndex), newAtribute, ...attributes.slice(attributeIndex+1, len)];
             const updatedItem = {...item, attributes: newAtributes};
-            const updatedItems = [...items];
-            updatedItems[itemIndex] = updatedItem;
+            const existedItemIndex = items.findIndex(itemInArr => {
+                if(itemInArr.attributes && item.attributes && itemInArr.id === item.id){
+                    return this.checkEqualAttributes(itemInArr.attributes, updatedItem.attributes);
+                }
+            });
+            //stack items with same attributes in one item with bigger amount
+            let updatedItems = [...items];
+            if(existedItemIndex > -1){
+                const existedItem = updatedItems[existedItemIndex];
+                updatedItems[existedItemIndex] = {...existedItem, amount: existedItem.amount + 1};
+                updatedItems.splice(itemIndex, 1);
+            } else{
+                updatedItems[itemIndex] = updatedItem;
+            }
+            
             this.updateSessionStorage(updatedItems, 'items');
             return {
                 items: updatedItems

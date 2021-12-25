@@ -10,7 +10,7 @@ export default class CartOverlay extends Component {
         const {activeCurrency, itemsCount, toggleCartOverlay, logCheckout} = this.props;
         return (
             <>
-            { ReactDOM.createPortal(<Backdrop/>, document.getElementById('backdrop-root'))}
+            { ReactDOM.createPortal(<Backdrop toggleCartOverlay={toggleCartOverlay}/>, document.getElementById('backdrop-root'))}
             <div className='cart-overlay'>
                 <div className='cart-overlay-title'> <span className='bold'>My bag, </span>{itemsCount} <span> items</span></div>
                 <CartComponent activeCurrency={activeCurrency}/>

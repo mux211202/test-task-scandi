@@ -1,5 +1,9 @@
 .galery{
+    position: relative;
     display: flex;
+}
+.main-image-container{
+    position: relative;
 }
 .galery img{
     object-fit: scale-down;

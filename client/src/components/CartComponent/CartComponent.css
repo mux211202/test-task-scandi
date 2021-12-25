@@ -9,11 +9,7 @@
     display: flex;
     justify-content: space-between;
 }
-.cart-item-img{
-    width: 141px;
-    height: 185px;
-    object-fit: scale-down;
-}
+
 .cart-item .product-price{
     margin-top: 12px;
 }
