@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import './Backdrop.css';
-export default class Backdrop extends Component {
+export default class Backdrop extends PureComponent {
     render() {
         const {toggleCartOverlay} = this.props;
         return (

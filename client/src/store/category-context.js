@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { CATEGORIES, CURRENCIES, categoryQuery } from '../queries';
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
@@ -16,10 +16,11 @@ const CategoryContext = React.createContext({
     changeActiveCategory: ()=>{},
     changeActiveCurrency: ()=>{},
     getProducts: ()=>{},
-    createActiveCurrencyObj: ()=>{}
+    createActiveCurrencyObj: ()=>{},
+    setError: ()=>{}
 });
 
-export  class CategoryContextProvider extends Component {
+export  class CategoryContextProvider extends PureComponent {
     constructor(){
         super();
         this.state={
@@ -28,10 +29,25 @@ export  class CategoryContextProvider extends Component {
             products:[],
             categories:[],
             currencies:[],
+            error:''
         }
     }
-    getAllCategories = () =>{
-        const allCategory = {__typename: 'Category', name:'all', loaded: false, index: 0}
+
+    componentDidMount(){
+        this.getAllCurrencies();
+        this.getAllCategories();
+        const sessionCurrency = JSON.parse(sessionStorage.getItem('activeCurrency'));
+        if(sessionCurrency){
+            this.changeActiveCurrency(sessionCurrency);
+        }
+    }
+
+    setError=(error)=>{
+        this.setState({error});
+    }
+
+    getAllCategories = () =>{//set category array
+        const allCategory = {__typename: 'Category', name:'all', loaded: false, index: 0}//create an all category object
         client.query({
             query: CATEGORIES
         }).then(res =>{
@@ -42,7 +58,8 @@ export  class CategoryContextProvider extends Component {
             this.setState({categories: resArr});
         })
     }
-    getAllCurrencies = () =>{
+
+    getAllCurrencies = () =>{//set all currencies array
         client.query({
             query: CURRENCIES
         }).then(res =>{
@@ -59,28 +76,22 @@ export  class CategoryContextProvider extends Component {
                 for(const key in currenciesLogoDict){
                     if(key===currency){
                         return{
-                            value: currency,
-                            string: `${currenciesLogoDict[key]} ${currency}`
+                            value: currency,//value is just an abbreviation('USD', 'GPB')
+                            string: `${currenciesLogoDict[key]} ${currency}`//string is currency's logo + value
                         }
-                    }  
-                }      
+                    }
+                }
+                return null   
             });
             this.setState({currencies: newCurrencies})
         })
     }
-    componentDidMount(){
-        this.getAllCurrencies();
-        this.getAllCategories();
-        const sessionCurrency = JSON.parse(sessionStorage.getItem('activeCurrency'));
-        if(sessionCurrency){
-            this.changeActiveCurrency(sessionCurrency);
-        }
-    }
+
     getAllProducts =() =>{ //a method that is used in getProducts method, just to do it shorter
         const {categories} = this.state;
         const categArr = categories.filter(elem=> elem.name !== 'all');
         let productsArr = [];
-		categArr.forEach((categ) =>{
+		categArr.forEach((categ) =>{//get products for every category, we have, to show all products
 			client.query({
 				query: categoryQuery(categ.name)
 			}).then(result =>
@@ -96,6 +107,7 @@ export  class CategoryContextProvider extends Component {
 				}));
 		})
     }
+
     getProducts = (categ) => {
         if(categ === 'all'){
             this.getAllProducts();
@@ -112,15 +124,16 @@ export  class CategoryContextProvider extends Component {
             })
         }
     }
-    setLoadedCategory = (categ) =>{
+
+    setLoadedCategory = (categ) =>{//this function is needed to remember what categories user has already loaded
         this.setState(({categories}) =>{
             let categArr = [];
             const categObj = categories.filter(category => category.name === categ)[0];
             if (categObj === undefined || categObj.loaded){
                 return
-            }else if(categ === 'all'){
+            }else if(categ === 'all'){//if category==='all', update all categories to loaded
                 categArr = categories.map((category) => {return {...category, loaded: true}})
-            }else{
+            }else{//else -> find the category and update 'loaded' key
                 const index = categories.findIndex((category) => category.name === categ);
                 categArr = categories;
                 categArr[index].loaded = true;
@@ -130,7 +143,7 @@ export  class CategoryContextProvider extends Component {
                         loadedCount++
                     }
                 })
-                if(loadedCount === categories.length - 1){
+                if(loadedCount === categories.length - 1){//if this is the last loaded category update 'all' category as loaded
                     categArr[0].loaded = true
                 }  
             }
@@ -140,7 +153,8 @@ export  class CategoryContextProvider extends Component {
             
         })
     }
-    createActiveCurrencyObj = (currency) => {
+
+    createActiveCurrencyObj = (currency) => {//this function is needed to create currency object outside this file
         const {currencies} = this.state;
         const currencyObj = currencies.filter((cur)=> cur.value === currency)[0];
         return currencyObj
@@ -153,17 +167,35 @@ export  class CategoryContextProvider extends Component {
             this.setState({activeCurrency: currency})
         }
     }
+
     changeActiveCategory = (categ) => {
         this.setLoadedCategory(categ);
-        this.setState({activeCategory: categ});
+        this.setState(({activeCategory, categories}) =>{
+            const categoryObj = categories.filter(category => category.name === categ)[0];
+            let er;
+            let newCategory;
+            if(categoryObj !== undefined && categoryObj){ //if catgory obj exists in category array
+                er = '';
+                newCategory = categoryObj;
+            }else{//else set an error
+                er = 'url-not-correct';
+                newCategory = activeCategory;
+            }
+            return{
+                error: er,
+                activeCategory: newCategory
+            }
+        });
     }
+    
     render() {
         const contextValue = {
             ...this.state, 
             changeActiveCategory: this.changeActiveCategory,
             changeActiveCurrency: this.changeActiveCurrency,
             getProducts: this.getProducts,
-            createActiveCurrencyObj: this.createActiveCurrencyObj
+            createActiveCurrencyObj: this.createActiveCurrencyObj,
+            setError: this.setError
         }
         return (
             <CategoryContext.Provider value={contextValue}>

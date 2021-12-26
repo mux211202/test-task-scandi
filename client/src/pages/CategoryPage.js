@@ -1,16 +1,23 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import "./CategoryPage.css";
 import ProductCard from '../components/ProductCard/ProductCard';
-export default class CategoryPage extends Component {
+import PageNotFound from './PageNotFound';
+export default class CategoryPage extends PureComponent {
     componentDidMount(){
-        const {urlCategory, changeActiveCategory, getProducts, categories} = this.props;
+        const {urlCategory, changeActiveCategory, getProducts, categories, setError} = this.props;
         const categoryObj = categories.filter(category => category.name === urlCategory)[0];
-        if(categories[0].loaded || categoryObj.loaded || categoryObj === undefined){
-            changeActiveCategory(urlCategory);
+        if(categoryObj !== undefined){
+            setError('');
+            if(categories[0].loaded || categoryObj.loaded || categoryObj === undefined){
+                changeActiveCategory(urlCategory);
+            }else{
+                getProducts(urlCategory);
+                changeActiveCategory(urlCategory);
+            }
         }else{
-            getProducts(urlCategory);
-            changeActiveCategory(urlCategory);
+            setError('url-not-correct');
         }
+        
     }
     componentWillUnmount(){
         const {changeActiveCategory} = this.props;
@@ -38,7 +45,7 @@ export default class CategoryPage extends Component {
     }
     
     render() {
-        const {products, urlCategory, activeCurrency} = this.props;
+        const {products, urlCategory, activeCurrency,error} = this.props;
         let categoryProducts;
         if(urlCategory==='all'){
             categoryProducts = products;
@@ -48,6 +55,8 @@ export default class CategoryPage extends Component {
         categoryProducts = categoryProducts.sort(this.productsSortFunction);
         return (
             <>
+                {error !== 'url-not-correct' ? 
+                <>
                 <h1 className="category-name">
                     {this.props.urlCategory}
                 </h1>
@@ -63,6 +72,7 @@ export default class CategoryPage extends Component {
                         })
                     }
                 </div>
+                </> : <PageNotFound/>}
             </>
         )
     }

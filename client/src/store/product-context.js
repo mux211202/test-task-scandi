@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { productQuery } from '../queries';
 import { ApolloClient, InMemoryCache } from "@apollo/client";
 
@@ -13,19 +13,22 @@ const ProductContext = React.createContext({
     allSettedProducts: [],
     setActiveProduct: ()=>{},
     setAttributeValue: ()=>{},
-    attributes:[]
+    attributes:[],
+    error:''
 });
 
-export  class ProductContextProvider extends Component {
+export  class ProductContextProvider extends PureComponent {
     constructor(){
         super();
         this.state={
             allSettedProducts: [],
             activeProduct:{},
-            attributes:[]
+            attributes:[],
+            error:''
         }
     }
-    setAllSettedProducts = (productId, allSettedProducts, attributes) => {
+
+    setAllSettedProducts = (productId, allSettedProducts, attributes) => {//set products that we have already loaded
         const productIndInArr = allSettedProducts.findIndex((product)=> product.id === productId);
         const productsLen = allSettedProducts.length;
         const newSettedProduct = {...allSettedProducts[productIndInArr], attributes}
@@ -34,6 +37,7 @@ export  class ProductContextProvider extends Component {
                                     ...allSettedProducts.slice(productIndInArr+1, productsLen)];
         return newSettedProducts
     }
+
     setAttributeValue = (product, attributeName, index) => {
         this.setState(({attributes, allSettedProducts})=>{
             const attributeIndex  = attributes.findIndex(attribute => attribute.name === attributeName);
@@ -48,6 +52,7 @@ export  class ProductContextProvider extends Component {
                
         });
     }
+
     setDefaultAttributes = (product) => {
         const {attributes} = product;
         const newAttributes = attributes.map(attribute => {
@@ -55,13 +60,15 @@ export  class ProductContextProvider extends Component {
         });
         return newAttributes
     }
+
     setActiveProduct = (productData) => {
         this.setState(({allSettedProducts}) => {
             const attributes = this.setDefaultAttributes(productData);
             const productAndAttributes = {...productData, attributes};
             const productIndexInArr = allSettedProducts.findIndex((product)=> product.id === productData.id);
-            if(productIndexInArr === -1){
+            if(productIndexInArr === -1){//if we dont have this product in allSettedProducts -> add it to allSettedProducts array
                 return {
+                    error:'', 
                     activeProduct: productData,
                     allSettedProducts: [...allSettedProducts, productAndAttributes],
                     attributes
@@ -69,18 +76,27 @@ export  class ProductContextProvider extends Component {
             }else{
                 console.log([...allSettedProducts])
                 return  {
+                    error: '',
                     activeProduct: allSettedProducts[productIndexInArr],
                     attributes: allSettedProducts[productIndexInArr].attributes
                 }
             }
         })
     }
+    
     getActiveProduct = (productId) => {
         client.query({
             query: productQuery(productId)
         }).then(res =>{
-            this.setActiveProduct(res.data.product);
+            console.log(res)
+            if(res.data.product){ 
+                this.setActiveProduct(res.data.product);
+                this.setState({error: ''});
+            }else{
+                this.setState({error: 'url-not-correct'});
+            }
         })
+        
     }
    
     render() {

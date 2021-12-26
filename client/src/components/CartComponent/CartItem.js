@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Price from '../Price/Price';
 import Attributes from '../ProductInfo/Attributes/Attributes';
 import CartGalery from '../CartGalery/CartGalery';
-export default class CartItem extends Component {
+export default class CartItem extends PureComponent {
     plusOnClickHandler = () => {
         const {addToCart, productData, activeCurrency} = this.props;
         addToCart(productData, activeCurrency, productData.attributes);

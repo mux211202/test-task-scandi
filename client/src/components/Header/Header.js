@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import CategoryContext from '../../store/category-context';
 import CategoryList from './CategoryList/CategoryList';
 import './Header.css';
 import headerLogo from '../../img/header_logo.svg';
 import CurrencyCartContainer from './CurrencyCartContainer/CurrencyCartContainer';
-export default class Header extends Component {
+export default class Header extends PureComponent {
     
     render() {
         return (

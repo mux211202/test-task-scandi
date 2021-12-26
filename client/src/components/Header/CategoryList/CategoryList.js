@@ -1,6 +1,6 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import {NavLink} from 'react-router-dom';
-export default class CategoryList extends Component {
+export default class CategoryList extends PureComponent {
     
     onClickHandler=(e)=>{
         const value = e.target.innerHTML;

@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import CartItem from './CartItem';
 import './CartComponent.css';
 import CartContext from '../../store/cart-context';
 import Price from '../Price/Price';
 import Button from '../Layout/Button';
-export default class CartComponent extends Component {
+export default class CartComponent extends PureComponent {
     render() {
         const {activeCurrency} = this.props;
         return (

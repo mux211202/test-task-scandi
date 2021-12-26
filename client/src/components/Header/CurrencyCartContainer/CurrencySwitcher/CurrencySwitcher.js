@@ -13,6 +13,7 @@ export default class CurrencySwitcher extends Component {
         const newCurrency = createActiveCurrencyObj(target); // this function is needed to create currency obj before state update to pass obj as an argument
         setTotalAmount(items, newCurrency);
         changeActiveCurrency(target);
+        this.toggleSwitcherDisplay();
     }
     toggleSwitcherDisplay = () => {
         const {isCartOverlayVisible, setSwitcherDisplay} = this.props;

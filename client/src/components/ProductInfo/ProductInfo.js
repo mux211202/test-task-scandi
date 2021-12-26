@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './ProductInfo.css';
 import Attributes from './Attributes/Attributes';
 import Price from '../Price/Price';
 import Button from '../Layout/Button';
 import CartContext from '../../store/cart-context';
-export default class ProductInfo extends Component {
+export default class ProductInfo extends PureComponent {
     setProductDescription = () => {
         const descrBlock = document.querySelector('.product-description');
         const {productData} = this.props;
