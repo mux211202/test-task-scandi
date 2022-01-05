@@ -28,9 +28,7 @@
     margin-right: 2px;
 }
 .cart-item .attribute-value:hover{
-    transform: scale(1.1);
-}
-.cart-item .attribute-value.active:hover{
+    cursor: auto;
     transform: scale(1);
 }
 .right-side{

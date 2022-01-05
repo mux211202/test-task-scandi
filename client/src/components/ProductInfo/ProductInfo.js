@@ -4,11 +4,12 @@ import Attributes from './Attributes/Attributes';
 import Price from '../Price/Price';
 import Button from '../Layout/Button';
 import CartContext from '../../store/cart-context';
+import ReactHtmlParser from 'react-html-parser';
 export default class ProductInfo extends PureComponent {
     setProductDescription = () => {
-        const descrBlock = document.querySelector('.product-description');
         const {productData} = this.props;
-        descrBlock.innerHTML = productData.description;
+        
+        console.log(productData.description)
     }
     componentDidMount(){
         this.setProductDescription();
@@ -46,7 +47,7 @@ export default class ProductInfo extends PureComponent {
                         h='52px'>
                             ADD TO CART
                         </Button>
-                        <div className='product-description'/>
+                        <div className='product-description'>{ReactHtmlParser(description)}</div>
                     </div>
                     )
                 }

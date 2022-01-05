@@ -5,7 +5,6 @@ const CartContext = React.createContext({
     totalAmount: '$ 0',
     addToCart: ()=>{},
     removeFromCart: ()=>{},
-    setCartAttribute: ()=>{},
     setTotalAmount: ()=>{},
     isCartOverlayVisible: false,
     toggleCartOverlay: ()=>{},
@@ -18,8 +17,6 @@ export  class CartContextProvider extends PureComponent {
         this.state={
             items:[],
             totalAmount: '$ 0', 
-            addToCart: ()=>{},
-            removeFromCart: ()=>{},
             isCartOverlayVisible: false,
             itemsCount:0
         }
@@ -116,9 +113,11 @@ export  class CartContextProvider extends PureComponent {
             if(!attributes){
                 attributes = this.setCartDefaultAttributes(item.attributes);
             }
+            item = {...item, attributes}
             const existingCartItemIndex = this.findItemIndex(items, item); //check if we have item with same id and selected attrbutes
             const  existingCartItem = items[existingCartItemIndex];
             let updatedItems;
+            // console.log(existingCartItemIndex)
             if(existingCartItem){
                 const updatedItem = {
                     ...existingCartItem,
@@ -145,11 +144,7 @@ export  class CartContextProvider extends PureComponent {
 
     removeFromCart = (item, activeCurrency) => {
         this.setState(({items, itemsCount}) =>{
-            const itemIndex = items.findIndex(itemInArr => {
-                if(itemInArr.attributes && item.attributes && itemInArr.id === item.id){
-                    return this.checkEqualAttributes(itemInArr.attributes, item.attributes);
-                }
-            });
+            const itemIndex = this.findItemIndex(items, item);
             let updatedItems;
             let newTotal;
             if(item.amount === 1){// if item's previous amount is 1 item we delete this item from the array
@@ -181,37 +176,6 @@ export  class CartContextProvider extends PureComponent {
         })
     }
 
-    setCartAttribute = (item, attributeName, index) => {//function, that chages item's attributes in cart
-        this.setState(({items})=>{
-            const itemIndex = this.findItemIndex(items, item);
-            const attributes = items[itemIndex].attributes;
-            const attributeIndex  = attributes.findIndex(attribute => attribute.name === attributeName);
-            const newAtribute = {...attributes[attributeIndex], selectedValueIndex: index};
-            const len = attributes.length;
-            const newAtributes = [...attributes.slice(0,attributeIndex), newAtribute, ...attributes.slice(attributeIndex+1, len)];
-            const updatedItem = {...item, attributes: newAtributes};
-            const existedItemIndex = items.findIndex(itemInArr => {
-                if(itemInArr.attributes && item.attributes && itemInArr.id === item.id){
-                    return this.checkEqualAttributes(itemInArr.attributes, updatedItem.attributes);
-                }
-            });
-            //stack items with same attributes in one item with bigger amount
-            let updatedItems = [...items];
-            if(existedItemIndex > -1){
-                const existedItem = updatedItems[existedItemIndex];
-                updatedItems[existedItemIndex] = {...existedItem, amount: existedItem.amount + 1};
-                updatedItems.splice(itemIndex, 1);
-            } else{
-                updatedItems[itemIndex] = updatedItem;
-            }
-            
-            this.updateSessionStorage(updatedItems, 'items');
-            return {
-                items: updatedItems
-            }
-               
-        });
-    }
 
     logCheckout = () => { // console logs information about order: checkout click
         const {items, totalAmount} = this.state;
@@ -230,7 +194,6 @@ export  class CartContextProvider extends PureComponent {
             ...this.state,
             addToCart: this.addToCart,
             removeFromCart: this.removeFromCart,
-            setCartAttribute: this.setCartAttribute,
             setTotalAmount: this.setTotalAmount,
             toggleCartOverlay: this.toggleCartOverlay,
             logCheckout: this.logCheckout

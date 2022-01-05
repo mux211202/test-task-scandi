@@ -19,15 +19,15 @@ class GaleryMainImage extends PureComponent {
             <div className='main-image-container'>
                 {srcArr.length > 1 ?
                 <>
-                <img className='cart-arrow prev' onClick={prevHandler} src={prev}/>
-                <img className='cart-arrow next' onClick={nextHandler} src={next}/>
+                <img alt='prev' className='cart-arrow prev' onClick={prevHandler} src={prev}/>
+                <img alt='next' className='cart-arrow next' onClick={nextHandler} src={next}/>
                 </> : null
                 }
                 <img 
+                alt=''
                 className='galery-main-image' 
                 key={`main photo ${src}`} 
-                src={src} 
-                alt='main img' />
+                src={src}  />
             </div>
         );
     }

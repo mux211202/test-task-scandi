@@ -15,6 +15,19 @@ export default class CurrencySwitcher extends Component {
         changeActiveCurrency(target);
         this.toggleSwitcherDisplay();
     }
+    componentDidMount() {
+        document.addEventListener('click', this.otsideComponentClickHanler);
+    }
+    
+    componentWillUnmount() {
+        document.removeEventListener('click', this.otsideComponentClickHanler);
+    }
+    otsideComponentClickHanler = (e) => {
+        const {isSwitcherVisible} = this.state;
+        if( isSwitcherVisible && !e.target.getAttribute('data-component')){
+            this.toggleSwitcherDisplay();
+        }
+    }
     toggleSwitcherDisplay = () => {
         const {isCartOverlayVisible, setSwitcherDisplay} = this.props;
         if(isCartOverlayVisible){
@@ -37,12 +50,13 @@ export default class CurrencySwitcher extends Component {
         const { currencies, activeCurrency } = this.props;
         const { isSwitcherVisible } = this.state;
         return (
-            <div className='currency-select-container'>
-                <div className='value'>{activeCurrency.string.slice(0,1)}</div>
+            <div className='currency-select-container' data-component={true}>
+                <div className='value'data-component={true} onClick={this.toggleSwitcherDisplay} >{activeCurrency.string.slice(0,1)}</div>
                 {isSwitcherVisible ? 
-                <div className='currency-select'>
+                <div className='currency-select'data-component={true}>
                     {currencies.map(currency =>
                         <div
+                        data-component={true}
                         className='currency-select-item' 
                         onClick={this.onCurrencyChangeHandler}
                         data-value={currency.value} 
@@ -51,7 +65,7 @@ export default class CurrencySwitcher extends Component {
                         </div>
                     )}
                 </div> : null}
-                <img className='currency-select-switcher' src={switcher} onClick={this.toggleSwitcherDisplay}/>
+                <img alt='' className='currency-select-switcher' data-component={true} src={switcher} onClick={this.toggleSwitcherDisplay}/>
                 
             </div>
         )

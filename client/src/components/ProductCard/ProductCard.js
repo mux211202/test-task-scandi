@@ -7,7 +7,7 @@ import CartContext from '../../store/cart-context';
 export default class ProductCard extends PureComponent {
     render() {
         const {prices, name, gallery, id, inStock, brand} = this.props.data;
-        const {activeCurrency, data, activeCategory} = this.props;
+        const {activeCurrency, data} = this.props;
         return (
             <CartContext.Consumer>
                 {
@@ -25,7 +25,7 @@ export default class ProductCard extends PureComponent {
                                     </div>
                                 {!inStock && <div className= 'out-of-stock'>OUT OF STOCK</div>}
                             </Link>
-                            {inStock && <img onClick={()=>{addToCart(data, activeCurrency)}}className="product-cart-icon" src={cartIcon}/>}
+                            {inStock && <img alt='' onClick={()=>{addToCart(data, activeCurrency)}} className="product-cart-icon" src={cartIcon}/>}
                         </div>
                     )}
                 }

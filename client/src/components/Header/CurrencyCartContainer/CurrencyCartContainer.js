@@ -35,7 +35,7 @@ export default class CurrencyCartContainer extends PureComponent {
                         changeActiveCurrency={changeActiveCurrency}/>
                         <div onClick={!isSwitcherVisible ? toggleCartOverlay : ()=>{}} className='header-cart-logo'>
                             {itemsCount>0 && <div className='cart-items-counter'>{itemsCount}</div>}
-                            <img src={CartLogo} atl='cart-logo'/>
+                            <img src={CartLogo} alt=''/>
                         </div>
                         <div className='cart-overlay-container'>
                             {isCartOverlayVisible ? <CartOverlay

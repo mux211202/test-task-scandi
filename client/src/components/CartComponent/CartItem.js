@@ -12,7 +12,7 @@ export default class CartItem extends PureComponent {
         removeFromCart(productData, activeCurrency)
     }
     render() {
-        const {activeCurrency, productData, setAttributeValue} = this.props;
+        const {activeCurrency, productData} = this.props;
         const {name, brand, amount, gallery, prices, id} = this.props.productData;
         return (
             <>
@@ -26,7 +26,7 @@ export default class CartItem extends PureComponent {
                     </div>
                     <Attributes
                         productData={productData} 
-                        setAttributeValue={setAttributeValue} 
+                        setAttributeValue={()=>{return}} //onclick function
                         id={id} attributes={productData.attributes}
                     />
                 </div>
